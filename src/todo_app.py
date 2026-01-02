@@ -78,6 +78,27 @@ class TodoApp:
         print(f"Error: Task with ID {task_id} not found!")
         return False
 
+    def update_task(self, task_id, new_description):
+        """Update a task's description"""
+        try:
+            task_id = int(task_id)
+        except ValueError:
+            print("Error: Task ID must be a number!")
+            return False
+
+        if not new_description.strip():
+            print("Error: New description cannot be empty!")
+            return False
+
+        for task in self.tasks:
+            if task['id'] == task_id:
+                task['description'] = new_description.strip()
+                print(f"Task {task_id} updated successfully!")
+                return True
+
+        print(f"Error: Task with ID {task_id} not found!")
+        return False
+
     def show_menu(self):
         """Display the main menu"""
         print("\n" + "="*60)
@@ -87,7 +108,8 @@ class TodoApp:
         print("2. List Tasks")
         print("3. Mark Task as Done")
         print("4. Delete Task")
-        print("5. Exit")
+        print("5. Update Task")
+        print("6. Exit")
         print("="*60)
 
     def run(self):
@@ -96,7 +118,7 @@ class TodoApp:
 
         while True:
             self.show_menu()
-            choice = input("\nEnter your choice (1-5): ").strip()
+            choice = input("\nEnter your choice (1-6): ").strip()
 
             if choice == '1':
                 description = input("Enter task description: ")
@@ -118,11 +140,18 @@ class TodoApp:
                     self.delete_task(task_id)
 
             elif choice == '5':
+                self.list_tasks()
+                if self.tasks:
+                    task_id = input("\nEnter task ID to update: ")
+                    new_description = input("Enter new task description: ")
+                    self.update_task(task_id, new_description)
+
+            elif choice == '6':
                 print("\nThank you for using Todo App! Goodbye!")
                 break
 
             else:
-                print("\nError: Invalid choice! Please enter a number between 1-5.")
+                print("\nError: Invalid choice! Please enter a number between 1-6.")
 
 
 def main():
